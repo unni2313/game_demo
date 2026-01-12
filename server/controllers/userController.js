@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 // Register a new user
 exports.registerUser = async (req, res) => {
@@ -25,8 +26,16 @@ exports.registerUser = async (req, res) => {
 
         const savedUser = await newUser.save();
 
+        // Create Token
+        const token = jwt.sign(
+            { id: savedUser._id },
+            process.env.JWT_SECRET || 'secret_key',
+            { expiresIn: '7d' }
+        );
+
         res.status(201).json({
             message: 'User registered successfully',
+            token,
             user: {
                 id: savedUser._id,
                 username: savedUser.username,
@@ -55,16 +64,41 @@ exports.loginUser = async (req, res) => {
             return res.status(400).json({ message: 'Invalid username or password' });
         }
 
-        // Successful login
-        // In a full app we'd send a token here, but for "minimalistic" we'll just return user info
+        // Create Token
+        const token = jwt.sign(
+            { id: user._id },
+            process.env.JWT_SECRET || 'secret_key',
+            { expiresIn: '7d' }
+        );
+
         res.json({
             message: 'Login successful',
+            token,
             user: {
                 id: user._id,
                 username: user.username,
                 age: user.age,
                 best_score: user.best_score
             }
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+exports.getUserProfile = async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.id }).select('-password');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Calculate rank: count users with best_score > current user's best_score
+        const rank = await User.countDocuments({ best_score: { $gt: user.best_score } }) + 1;
+
+        res.json({
+            user,
+            rank
         });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
