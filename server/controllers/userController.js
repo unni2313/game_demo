@@ -5,12 +5,12 @@ const jwt = require('jsonwebtoken');
 // Register a new user
 exports.registerUser = async (req, res) => {
     try {
-        const { username, age, password } = req.body;
+        const { username, age, password, email, phone } = req.body;
 
         // Check if user already exists
-        const existingUser = await User.findOne({ username });
+        const existingUser = await User.findOne({ $or: [{ username }, { email }] });
         if (existingUser) {
-            return res.status(400).json({ message: 'Username already exists' });
+            return res.status(400).json({ message: 'Username or Email already exists' });
         }
 
         // Hash password
@@ -21,7 +21,9 @@ exports.registerUser = async (req, res) => {
         const newUser = new User({
             username,
             age,
-            password: hashedPassword
+            password: hashedPassword,
+            email,
+            phone
         });
 
         const savedUser = await newUser.save();
@@ -39,7 +41,9 @@ exports.registerUser = async (req, res) => {
             user: {
                 id: savedUser._id,
                 username: savedUser.username,
-                age: savedUser.age
+                age: savedUser.age,
+                email: savedUser.email,
+                phone: savedUser.phone
             }
         });
     } catch (error) {
@@ -78,6 +82,8 @@ exports.loginUser = async (req, res) => {
                 id: user._id,
                 username: user.username,
                 age: user.age,
+                email: user.email,
+                phone: user.phone,
                 best_score: user.best_score
             }
         });

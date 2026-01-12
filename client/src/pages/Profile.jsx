@@ -38,6 +38,8 @@ const Profile = () => {
             <div style={{ background: '#333', padding: '2rem', borderRadius: '12px', marginTop: '1.5rem', textAlign: 'left' }}>
                 <p style={{ fontSize: '1.2rem', marginBottom: '1rem' }}>Username: <strong>{user.username}</strong></p>
                 <p style={{ marginBottom: '1rem' }}>Age: <strong>{user.age}</strong></p>
+                <p style={{ marginBottom: '1rem' }}>Email: <strong>{user.email}</strong></p>
+                <p style={{ marginBottom: '1rem' }}>Phone: <strong>{user.phone || 'N/A'}</strong></p>
 
                 <div style={{ height: '1px', background: '#555', margin: '1.5rem 0' }}></div>
 
