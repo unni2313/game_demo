@@ -45,12 +45,10 @@ const Profile = () => {
 
                 <p style={{ fontSize: '1.5rem', color: '#646cff', marginBottom: '0.5rem' }}>Global Rank: <strong>#{rank}</strong></p>
                 <p>Best Score: <strong>{user.best_score}</strong></p>
-                <p>Last Score: <strong>{user.last_score}</strong></p>
             </div>
 
             <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
                 <button onClick={() => navigate('/game')}>Play Game</button>
-                <button onClick={() => navigate('/leaderboard')} style={{ background: '#444' }}>Scoreboard</button>
             </div>
         </div>
     );

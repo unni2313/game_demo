@@ -16,10 +16,6 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  last_score: {
-    type: Number,
-    default: 0
-  },
   password: {
     type: String,
     required: true

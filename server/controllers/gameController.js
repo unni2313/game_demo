@@ -20,7 +20,6 @@ exports.addScore = async (req, res) => {
         // Update user scores
         const user = await User.findById(user_id);
         if (user) {
-            user.last_score = score;
             if (score > user.best_score) {
                 user.best_score = score;
             }
@@ -31,7 +30,6 @@ exports.addScore = async (req, res) => {
             message: 'Score added successfully',
             result: newResult,
             userUpdates: {
-                last_score: user.last_score,
                 best_score: user.best_score
             }
         });
