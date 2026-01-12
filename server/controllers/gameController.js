@@ -41,7 +41,7 @@ exports.addScore = async (req, res) => {
 exports.getLeaderboard = async (req, res) => {
     try {
         const topScores = await User.find()
-            .sort({ best_score: -1 })
+            .sort({ best_score: -1,updatedAt: 1})
             .select('username best_score');
 
         res.json(topScores);
