@@ -3,7 +3,7 @@ Cricket Game Demo - API Documentation
 USER APIs:
 - POST /api/users/register: Creates a new user account and returns a JWT token.
 - POST /api/users/login: Authenticates user credentials and returns a JWT token.
-- GET /api/users/userwithrank/:id: Fetches user profile details along with their global leaderboard rank.
+- GET /api/users/userwithrank/:id: Fetches user profile details, global rank, and aggregate match statistics (wins, win rate, sixes, fours).
 
 GAME & CRICKET APIs:
 - POST /api/games/start-match: Initializes a new cricket match session for the player.
@@ -14,6 +14,11 @@ GAME & CRICKET APIs:
 
 DATABASE STRUCTURE:
 - Users: Stores login credentials and cumulative total_score.
-- Matches: Stores overall game settings (innings, overs, target) and final results.
+- Matches: Stores overall game settings (innings, overs, target) and final results (status, sixes, fours).
 - Overs: Serves as a link between matches and balls to group deliveries.
 - Balls: Records individual delivery details (runs, wicket, angle).
+
+SCORING FORMULA:
+Match points = (Runs * 10) + (6s * 6) + (4s * 4) - (Wickets * 30) - [Deficit * 5 if Lost]
+Points are added cumulatively to the user's total_score.
+Match ends when wickets reach the Innings number.

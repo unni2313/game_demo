@@ -116,9 +116,39 @@ exports.getUserProfile = async (req, res) => {
         // Calculate rank: count users with total_score > current user's total_score
         const rank = await users.countDocuments({ total_score: { $gt: user.total_score } }) + 1;
 
+        // Calculate Match Statistics
+        const matchStats = await db.collection('matches').aggregate([
+            { $match: { playerId: user._id, status: { $ne: 'in-progress' } } },
+            {
+                $group: {
+                    _id: null,
+                    totalMatches: { $sum: 1 },
+                    wins: { $sum: { $cond: [{ $eq: ["$status", "won"] }, 1, 0] } },
+                    totalSixes: { $sum: "$sixes" },
+                    totalFours: { $sum: "$fours" }
+                }
+            }
+        ]).toArray();
+
+        const stats = matchStats[0] || {
+            totalMatches: 0,
+            wins: 0,
+            totalSixes: 0,
+            totalFours: 0
+        };
+
+        const winRate = stats.totalMatches > 0 ? ((stats.wins / stats.totalMatches) * 100).toFixed(1) : 0;
+
         res.json({
             user,
-            rank
+            rank,
+            stats: {
+                played: stats.totalMatches,
+                wins: stats.wins,
+                winRate: winRate + '%',
+                sixes: stats.totalSixes,
+                fours: stats.totalFours
+            }
         });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });

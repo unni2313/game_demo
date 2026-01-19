@@ -29,22 +29,32 @@ const Profile = () => {
     if (loading) return <div style={{ textAlign: 'center', padding: '2rem' }}>Loading profile...</div>;
     if (error) return <div style={{ textAlign: 'center', padding: '2rem', color: '#ff6b6b' }}>{error}</div>;
 
-    const { user, rank } = profileData;
+    const { user, rank, stats } = profileData;
 
     return (
-        <div className="profile-container" style={{ maxWidth: '500px', margin: '0 auto', padding: '2rem' }}>
+        <div className="profile-container" style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem' }}>
             <h1>User Profile</h1>
 
-            <div style={{ background: '#333', padding: '2rem', borderRadius: '12px', marginTop: '1.5rem', textAlign: 'left' }}>
-                <p style={{ fontSize: '1.2rem', marginBottom: '1rem' }}>Username: <strong>{user.username}</strong></p>
-                <p style={{ marginBottom: '1rem' }}>Age: <strong>{user.age}</strong></p>
-                <p style={{ marginBottom: '1rem' }}>Email: <strong>{user.email}</strong></p>
-                <p style={{ marginBottom: '1rem' }}>Phone: <strong>{user.phone || 'N/A'}</strong></p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginTop: '1.5rem' }}>
+                {/* Account Details */}
+                <div style={{ background: '#333', padding: '1.5rem', borderRadius: '12px', textAlign: 'left' }}>
+                    <h3 style={{ color: '#646cff', marginTop: 0 }}>Account Details</h3>
+                    <p style={{ margin: '0.5rem 0' }}>Username: <strong>{user.username}</strong></p>
+                    <p style={{ margin: '0.5rem 0' }}>Rank: <strong>#{rank}</strong></p>
+                    <p style={{ margin: '0.5rem 0' }}>Total Score: <strong>{user.total_score}</strong></p>
+                    <p style={{ margin: '0.5rem 0' }}>Age: <strong>{user.age}</strong></p>
+                    <p style={{ margin: '0.5rem 0' }}>Email: <strong>{user.email}</strong></p>
+                </div>
 
-                <div style={{ height: '1px', background: '#555', margin: '1.5rem 0' }}></div>
-
-                <p style={{ fontSize: '1.5rem', color: '#646cff', marginBottom: '0.5rem' }}>Global Rank: <strong>#{rank}</strong></p>
-                <p>Total Score: <strong>{user.total_score}</strong></p>
+                {/* Match Statistics */}
+                <div style={{ background: '#333', padding: '1.5rem', borderRadius: '12px', textAlign: 'left' }}>
+                    <h3 style={{ color: '#27ae60', marginTop: 0 }}>Match Stats</h3>
+                    <p style={{ margin: '0.5rem 0' }}>Matches Played: <strong>{stats.played}</strong></p>
+                    <p style={{ margin: '0.5rem 0' }}>Matches Won: <strong>{stats.wins}</strong></p>
+                    <p style={{ margin: '0.5rem 0' }}>Win Rate: <strong>{stats.winRate}</strong></p>
+                    <p style={{ margin: '0.5rem 0' }}>Total Sixes: <strong>{stats.sixes}</strong></p>
+                    <p style={{ margin: '0.5rem 0' }}>Total Fours: <strong>{stats.fours}</strong></p>
+                </div>
             </div>
 
             <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>

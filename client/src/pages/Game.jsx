@@ -105,7 +105,12 @@ const Game = () => {
                 <h1 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#646cff' }}>Cricket Demo</h1>
 
                 <div style={{ marginBottom: '1.5rem', padding: '1rem', background: '#333', borderRadius: '8px', fontSize: '0.9rem' }}>
-                    <p>Player: <strong>{user.username}</strong> | Total scores: <strong>{user.best_score}</strong></p>
+                    <p>Player: <strong>  <span
+                                            style={{ color: '#646cff', cursor: 'pointer', textDecoration: 'underline' }}
+                                            onClick={() => navigate(`/profile/${user.username}`)}
+                                        >
+                                            {user.username}
+                                        </span></strong> | Total scores: <strong>{user.best_score}</strong></p>
                 </div>
 
                 {gameState === 'setup' && (
