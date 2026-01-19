@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  best_score: {
+  total_score: {
     type: Number,
     default: 0
   },

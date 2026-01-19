@@ -21,4 +21,9 @@ export const getUserProfile = (id) => api.get(`/users/userwithrank/${id}`);
 export const addScore = (scoreData) => api.post('/game/add-score', scoreData);
 export const getLeaderboard = () => api.get('/game/leaderboard');
 
+// Cricket Specific API
+export const startMatch = (matchData) => api.post('/game/start-match', matchData);
+export const addBall = (ballData) => api.post('/game/add-ball', ballData);
+export const getMatchDetails = (matchId) => api.get(`/game/match/${matchId}`);
+
 export default api;

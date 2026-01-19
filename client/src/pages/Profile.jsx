@@ -44,7 +44,7 @@ const Profile = () => {
                 <div style={{ height: '1px', background: '#555', margin: '1.5rem 0' }}></div>
 
                 <p style={{ fontSize: '1.5rem', color: '#646cff', marginBottom: '0.5rem' }}>Global Rank: <strong>#{rank}</strong></p>
-                <p>Best Score: <strong>{user.best_score}</strong></p>
+                <p>Total Score: <strong>{user.total_score}</strong></p>
             </div>
 
             <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>

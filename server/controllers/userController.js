@@ -27,7 +27,7 @@ exports.registerUser = async (req, res) => {
             password: hashedPassword,
             email,
             phone,
-            best_score: 0,
+            total_score: 0,
             createdAt: new Date(),
             updatedAt: new Date()
         };
@@ -92,7 +92,7 @@ exports.loginUser = async (req, res) => {
                 age: user.age,
                 email: user.email,
                 phone: user.phone,
-                best_score: user.best_score
+                total_score: user.total_score
             }
         });
     } catch (error) {
@@ -113,8 +113,8 @@ exports.getUserProfile = async (req, res) => {
         // Remove password from response
         delete user.password;
 
-        // Calculate rank: count users with best_score > current user's best_score
-        const rank = await users.countDocuments({ best_score: { $gt: user.best_score } }) + 1;
+        // Calculate rank: count users with total_score > current user's total_score
+        const rank = await users.countDocuments({ total_score: { $gt: user.total_score } }) + 1;
 
         res.json({
             user,

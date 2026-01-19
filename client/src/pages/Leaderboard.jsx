@@ -59,7 +59,7 @@ const Leaderboard = ({ isComponent = false, refreshTrigger }) => {
                                         </span>
                                     </td>
                                     <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 'bold', color: '#646cff', width: '100px' }}>
-                                        {player.best_score}
+                                        {player.total_score}
                                     </td>
                                 </tr>
                             ))}

@@ -24,7 +24,7 @@ exports.addScore = async (req, res) => {
         const user = await db.collection('users').findOneAndUpdate(
             { _id: new ObjectId(user_id) },
             {
-                $inc: { best_score: score },
+                $inc: { total_score: score },
                 $set: { updatedAt: new Date() }
             },
             { returnDocument: 'after' }
@@ -34,7 +34,7 @@ exports.addScore = async (req, res) => {
             message: 'Score added successfully',
             result: { ...newResult, _id: result.insertedId },
             userUpdates: {
-                best_score: user.best_score
+                total_score: user.total_score
             }
         });
     } catch (error) {
@@ -47,8 +47,8 @@ exports.getLeaderboard = async (req, res) => {
         const db = getDb();
         const topScores = await db.collection('users')
             .find({})
-            .project({ username: 1, best_score: 1 })
-            .sort({ best_score: -1, updatedAt: 1 })
+            .project({ username: 1, total_score: 1 })
+            .sort({ total_score: -1, updatedAt: 1 })
             .toArray();
 
         res.json(topScores);
