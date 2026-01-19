@@ -1,4 +1,5 @@
-const User = require('../models/User');
+const { getDb } = require('../config/db');
+const { ObjectId } = require('mongodb');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -6,9 +7,11 @@ const jwt = require('jsonwebtoken');
 exports.registerUser = async (req, res) => {
     try {
         const { username, age, password, email, phone } = req.body;
+        const db = getDb();
+        const users = db.collection('users');
 
         // Check if user already exists
-        const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+        const existingUser = await users.findOne({ $or: [{ username }, { email }] });
         if (existingUser) {
             return res.status(400).json({ message: 'Username or Email already exists' });
         }
@@ -18,19 +21,22 @@ exports.registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         // Create new user
-        const newUser = new User({
+        const newUser = {
             username,
             age,
             password: hashedPassword,
             email,
-            phone
-        });
+            phone,
+            best_score: 0,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        };
 
-        const savedUser = await newUser.save();
+        const result = await users.insertOne(newUser);
 
         // Create Token
         const token = jwt.sign(
-            { id: savedUser._id },
+            { id: result.insertedId },
             process.env.JWT_SECRET || 'secret_key',
             { expiresIn: '7d' }
         );
@@ -39,11 +45,11 @@ exports.registerUser = async (req, res) => {
             message: 'User registered successfully',
             token,
             user: {
-                id: savedUser._id,
-                username: savedUser.username,
-                age: savedUser.age,
-                email: savedUser.email,
-                phone: savedUser.phone
+                id: result.insertedId,
+                username,
+                age,
+                email,
+                phone
             }
         });
     } catch (error) {
@@ -55,9 +61,11 @@ exports.registerUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
     try {
         const { username, password } = req.body;
+        const db = getDb();
+        const users = db.collection('users');
 
         // Find user
-        const user = await User.findOne({ username });
+        const user = await users.findOne({ username });
         if (!user) {
             return res.status(400).json({ message: 'Invalid username or password' });
         }
@@ -94,13 +102,19 @@ exports.loginUser = async (req, res) => {
 
 exports.getUserProfile = async (req, res) => {
     try {
-        const user = await User.findOne({ username: req.params.id }).select('-password');
+        const db = getDb();
+        const users = db.collection('users');
+
+        const user = await users.findOne({ username: req.params.id });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        // Remove password from response
+        delete user.password;
+
         // Calculate rank: count users with best_score > current user's best_score
-        const rank = await User.countDocuments({ best_score: { $gt: user.best_score } }) + 1;
+        const rank = await users.countDocuments({ best_score: { $gt: user.best_score } }) + 1;
 
         res.json({
             user,

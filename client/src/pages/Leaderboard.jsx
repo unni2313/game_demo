@@ -28,7 +28,7 @@ const Leaderboard = ({ isComponent = false, refreshTrigger }) => {
     return (
         <div className="leaderboard-container" style={{ width: '100%', maxWidth: isComponent ? '100%' : '600px', margin: isComponent ? '0' : '0 auto', padding: isComponent ? '1rem' : '2rem' }}>
             <h1>Scoreboard</h1>
-            {!isComponent && <p>Top Players & Their Best Scores</p>}
+            {!isComponent && <p>Top Players & Their Scores</p>}
 
             <div style={{ marginTop: '1rem', background: '#333', borderRadius: '12px', overflow: 'hidden' }}>
                 {loading ? (
@@ -43,7 +43,7 @@ const Leaderboard = ({ isComponent = false, refreshTrigger }) => {
                             <tr style={{ background: '#444' }}>
                                 <th style={{ padding: '1rem' }}>Rank</th>
                                 <th style={{ padding: '1rem' }}>Player</th>
-                                <th style={{ padding: '1rem', textAlign: 'right' }}>Best Score</th>
+                                <th style={{ padding: '1rem', textAlign: 'right' }}>Score</th>
                             </tr>
                         </thead>
                         <tbody>

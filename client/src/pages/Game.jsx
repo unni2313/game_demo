@@ -71,7 +71,7 @@ const Game = () => {
                 <h1>Dummy Game</h1>
                 <div style={{ marginBottom: '2rem', padding: '1rem', background: '#333', borderRadius: '8px' }}>
                     <p>Logged in as: <strong>{user.username}</strong></p>
-                    <p>Your Best Score: <strong>{user.best_score}</strong></p>
+                    <p>Your  Score: <strong>{user.best_score}</strong></p>
                     <p>My Profile: <span style={{ color: '#646cff', cursor: 'pointer', textDecoration: 'underline' }} onClick={() => navigate(`/profile/${user.username}`)}>View</span></p>
                 </div>
 
